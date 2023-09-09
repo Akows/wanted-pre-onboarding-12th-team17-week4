@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppDataContext } from '../context/AppDataContext';
+import TimeSeriesChart from './TimeSeriesChart';
 
 const MainPage: React.FC = () => {
   const context = useContext(AppDataContext);
@@ -23,10 +24,12 @@ const MainPage: React.FC = () => {
 
   return (
     <React.Fragment>
-      <div>MainPage</div>
+      {/* <div>MainPage</div>
       <div>{state.displayComponent === 'main' && <p>'메인!'</p>}</div>
       <button onClick={() => handleClick('nomain')}>no</button>
-      <button onClick={() => handleClick('main')}>yes</button>
+      <button onClick={() => handleClick('main')}>yes</button> */}
+
+      <TimeSeriesChart />
     </React.Fragment>
   );
 };
