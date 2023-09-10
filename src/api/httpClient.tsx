@@ -7,19 +7,14 @@ export class HttpClient {
     this.baseURL = baseURL;
   }
 
-  async fetchServerData() {
+  async fetch() {
     try {
-      const response = await axios.get(`${this.baseURL}`);
-
-      if (response.data && typeof response.data === 'object') {
-        return Object.keys(response.data).map(key => ({
-          time: key,
-          ...response.data[key],
-        }));
-      } else {
-        console.error('Invalid data format from API');
-        return [];
-      }
+      const response = await axios.get(`${this.baseURL}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
     } catch (error) {
       console.error('Error fetching the data', error);
       throw error;

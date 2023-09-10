@@ -1,5 +1,8 @@
 import React from 'react';
+import { DataFetchService } from './api/DataFetchService';
+import { HttpClient } from './api/httpClient';
 import './App.css';
+import { DataProvider } from './context/DataContext';
 import AppRouter from './router/AppRouter';
 import GlobalStyles from './styles/GlobalStyle';
 
@@ -8,11 +11,20 @@ import GlobalStyles from './styles/GlobalStyle';
 // TypeScript를 사용하는 프로젝트에서는 컴포넌트를 정의할 때 일관성을 유지하기 위해 React.FC 타입을 사용하는 것이 좋다.
 
 const App: React.FC = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  if (!apiUrl) {
+    throw new Error('REACT_APP_API_URL is not defined');
+  }
+
+  const httpClient = new HttpClient(apiUrl);
+  const dataService = new DataFetchService(httpClient);
+
   return (
-    <React.Fragment>
+    <DataProvider dataFetchService={dataService}>
       <GlobalStyles />
       <AppRouter />
-    </React.Fragment>
+    </DataProvider>
   );
 };
 

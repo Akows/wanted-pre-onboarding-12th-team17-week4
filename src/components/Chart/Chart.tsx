@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 import { CustomTooltip } from './CustomTooltip';
 import FilterButtons from './FilterButtons';
-import { HttpClient } from '../../api/httpClient';
+import { useData } from '../../context/DataContext';
 
 type DataItem = {
   time: string;
@@ -25,22 +25,17 @@ const Chart: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
+  const { fetchData } = useData();
+
   useEffect(() => {
-    const httpClient = new HttpClient(
-      'https://fourth-9qyivvzjg-akows.vercel.app/api/server',
-    );
-
-    async function fetchData() {
-      try {
-        const fetchedData = await httpClient.fetchServerData();
+    fetchData()
+      .then(fetchedData => {
         setData(fetchedData);
-      } catch (error) {
-        console.error('Error fetching the data', error);
-      }
-    }
-
-    fetchData();
-  }, []);
+      })
+      .catch(error => {
+        console.error('Failed to fetch data', error);
+      });
+  }, [fetchData]);
 
   const handleBarClick = (data: any) => {
     // data와 부속 값들이 제대로 존재할 경우에만 하이라이트 id를 지정.
