@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  AreaChart,
   Area,
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -10,6 +8,7 @@ import {
   Tooltip,
   Legend,
   ComposedChart,
+  Cell,
 } from 'recharts';
 import axios from 'axios';
 
@@ -20,7 +19,7 @@ type DataItem = {
   value_bar: number;
 };
 
-const TimeSeriesChart: React.FC = () => {
+const Chart: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([]);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
@@ -50,7 +49,20 @@ const TimeSeriesChart: React.FC = () => {
   }, []);
 
   const handleBarClick = (data: any) => {
-    setHighlightedId(data.id);
+    // data와 부속 값들이 제대로 존재할 경우에만 하이라이트 id를 지정.
+    if (
+      data &&
+      data.activePayload &&
+      data.activePayload[0] &&
+      data.activePayload[0].payload
+    ) {
+      setHighlightedId(data.activePayload[0].payload.id);
+    }
+    // 그렇지 않은 경우 하이라이트 id를 null값으로 되돌린다.
+    // 에러 방지 및 하이라이트 해제 목적을 겸한다.
+    else {
+      setHighlightedId(null);
+    }
   };
 
   const customTooltip = ({ active, payload }: any) => {
@@ -90,22 +102,46 @@ const TimeSeriesChart: React.FC = () => {
       >
         <CartesianGrid stroke="#f5f5f5" />
         <XAxis dataKey="key" />
-        <YAxis />
+
+        {/* 좌측 Y축 (value_area 기준) */}
+        <YAxis
+          yAxisId="left"
+          orientation="left"
+          dataKey="value_area"
+          stroke="#fa5a20"
+          tickCount={6}
+          domain={[0, 500]}
+        />
+        {/* 우측 Y축 (value_bar 기준) */}
+        <YAxis
+          yAxisId="right"
+          orientation="right"
+          dataKey="value_bar"
+          stroke="#413ea0"
+          tickCount={7}
+          domain={[0, 20000]}
+        />
+
         <Tooltip content={customTooltip} />
         <Legend />
         <Area
+          yAxisId="left"
           type="monotone"
           dataKey="value_area"
-          fill="#8884d8"
-          stroke="#8884d8"
+          stroke="#fa5a20"
+          fill={highlightedId ? '#fa5a20' : '#f6823f'}
         />
-        <Bar dataKey="value_bar" barSize={20} fill="#413ea0" />
+        <Bar yAxisId="right" dataKey="value_bar" barSize={20}>
+          {data.map((entry, index) => {
+            const fill = entry.id === highlightedId ? '#413ea0' : '#413ea07e';
+            return <Cell key={`cell-${index}`} fill={fill} />;
+          })}
+        </Bar>
       </ComposedChart>
       <div>
-        {/* Buttons for ID filtering. You might want to map over distinct IDs or some predefined set of IDs. */}
         {['성북구', '강남구', '노원구', '중랑구'].map(id => (
           <button key={id} onClick={() => setHighlightedId(id)}>
-            Highlight {id}
+            {id}
           </button>
         ))}
       </div>
@@ -113,4 +149,4 @@ const TimeSeriesChart: React.FC = () => {
   );
 };
 
-export default TimeSeriesChart;
+export default Chart;
