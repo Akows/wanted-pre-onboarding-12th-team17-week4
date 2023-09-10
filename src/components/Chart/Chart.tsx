@@ -10,9 +10,9 @@ import {
   ComposedChart,
   Cell,
 } from 'recharts';
-import axios from 'axios';
 import { CustomTooltip } from './CustomTooltip';
 import FilterButtons from './FilterButtons';
+import { HttpClient } from '../../api/httpClient';
 
 type DataItem = {
   time: string;
@@ -26,22 +26,14 @@ const Chart: React.FC = () => {
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
 
   useEffect(() => {
+    const httpClient = new HttpClient(
+      'https://fourth-9qyivvzjg-akows.vercel.app/api/server',
+    );
+
     async function fetchData() {
       try {
-        const response = await axios.get(
-          `https://fourth-9qyivvzjg-akows.vercel.app/api/server`,
-        );
-        // 데이터를 배열로 변환
-        if (response.data && typeof response.data === 'object') {
-          const transformedData = Object.keys(response.data).map(key => ({
-            time: key,
-            ...response.data[key],
-          }));
-
-          setData(transformedData);
-        } else {
-          console.error('Invalid data format from API');
-        }
+        const fetchedData = await httpClient.fetchServerData();
+        setData(fetchedData);
       } catch (error) {
         console.error('Error fetching the data', error);
       }
