@@ -11,6 +11,7 @@ import {
   Cell,
 } from 'recharts';
 import axios from 'axios';
+import { CustomTooltip } from './CustomTooltip';
 
 type DataItem = {
   time: string;
@@ -65,27 +66,6 @@ const Chart: React.FC = () => {
     }
   };
 
-  const customTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const { id, value_area, value_bar } = payload[0].payload;
-      return (
-        <div
-          style={{
-            backgroundColor: 'white',
-            border: '1px solid black',
-            padding: '5px',
-          }}
-        >
-          <p>ID: {id}</p>
-          <p>Value Area: {value_area}</p>
-          <p>Value Bar: {value_bar}</p>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
   return (
     <div>
       <ComposedChart
@@ -122,7 +102,7 @@ const Chart: React.FC = () => {
           domain={[0, 20000]}
         />
 
-        <Tooltip content={customTooltip} />
+        <Tooltip content={<CustomTooltip />} />
         <Legend />
         <Area
           yAxisId="left"
