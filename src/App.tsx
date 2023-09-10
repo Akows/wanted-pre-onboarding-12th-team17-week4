@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import AppRouter from './router/AppRouter';
-import { AppDataProvider } from './context/AppDataContext';
 import GlobalStyles from './styles/GlobalStyle';
 
 // React.FC?
@@ -12,9 +11,7 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <GlobalStyles />
-      <AppDataProvider>
-        <AppRouter />
-      </AppDataProvider>
+      <AppRouter />
     </React.Fragment>
   );
 };
