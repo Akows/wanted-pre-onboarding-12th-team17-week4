@@ -3,25 +3,33 @@
 // props의 경우 부모 컴포넌트에서 인자로 전달하지 않아도
 // Tooltip 컴포넌트의 content 속성에 CustomTooltip 컴포넌트를 적용하면 Recharts에서 알아서 주입한다.
 
+import styled from 'styled-components';
+
 export const CustomTooltip = (props: any) => {
   const { active, payload } = props;
 
   if (active && payload && payload.length) {
     const { id, value_area, value_bar } = payload[0].payload;
     return (
-      <div
-        style={{
-          backgroundColor: 'white',
-          border: '1px solid black',
-          padding: '5px',
-        }}
-      >
-        <p>ID: {id}</p>
-        <p>Value Area: {value_area}</p>
-        <p>Value Bar: {value_bar}</p>
-      </div>
+      <TooltipContainer>
+        <TooltipText>ID: {id}</TooltipText>
+        <TooltipText>Value Area: {value_area}</TooltipText>
+        <TooltipText>Value Bar: {value_bar}</TooltipText>
+      </TooltipContainer>
     );
   }
 
   return null;
 };
+
+const TooltipContainer = styled.div`
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 5px;
+`;
+
+const TooltipText = styled.p`
+  color: white;
+  margin: 0;
+`;

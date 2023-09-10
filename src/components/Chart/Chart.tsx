@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import axios from 'axios';
 import { CustomTooltip } from './CustomTooltip';
+import FilterButtons from './FilterButtons';
 
 type DataItem = {
   time: string;
@@ -68,6 +69,11 @@ const Chart: React.FC = () => {
 
   return (
     <div>
+      <FilterButtons
+        highlightedId={highlightedId}
+        setHighlightedId={setHighlightedId}
+      />
+
       <ComposedChart
         width={1200}
         height={600}
@@ -118,13 +124,6 @@ const Chart: React.FC = () => {
           })}
         </Bar>
       </ComposedChart>
-      <div>
-        {['성북구', '강남구', '노원구', '중랑구'].map(id => (
-          <button key={id} onClick={() => setHighlightedId(id)}>
-            {id}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };

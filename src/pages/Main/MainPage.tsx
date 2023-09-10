@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { AppDataContext } from '../context/AppDataContext';
+import { AppDataContext } from '../../context/AppDataContext';
 
-import Chart from '../components/Chart';
-import { ChartTitle } from '../components/ChartTitle';
+import Chart from '../../components/Chart/Chart';
+import { ChartTitle } from '../../components/ChartTitle/ChartTitle';
 
 const MainPage: React.FC = () => {
   const context = useContext(AppDataContext);
