@@ -9,12 +9,24 @@ export const CustomTooltip = (props: any) => {
   const { active, payload } = props;
 
   if (active && payload && payload.length) {
-    const { id, value_area, value_bar } = payload[0].payload;
+    const { time, id, value_area, value_bar } = payload[0].payload;
+
     return (
       <TooltipContainer>
-        <TooltipText>ID: {id}</TooltipText>
-        <TooltipText>Value Area: {value_area}</TooltipText>
-        <TooltipText>Value Bar: {value_bar}</TooltipText>
+        <TooltipText>
+          <BoldText>ID: </BoldText> {id}
+        </TooltipText>
+        <TooltipText>
+          <BoldText>TIME: </BoldText> {time}
+        </TooltipText>
+        <TooltipText>
+          <ColorBox color="#fa5a20" /> <BoldText>Value Area:</BoldText>{' '}
+          {value_area}
+        </TooltipText>
+        <TooltipText>
+          <ColorBox color="#413ea0" /> <BoldText>Value Bar:</BoldText>{' '}
+          {value_bar}
+        </TooltipText>
       </TooltipContainer>
     );
   }
@@ -32,4 +44,18 @@ const TooltipContainer = styled.div`
 const TooltipText = styled.p`
   color: white;
   margin: 0;
+  display: flex;
+  align-items: center;
+`;
+
+const ColorBox = styled.span<{ color: string }>`
+  width: 15px;
+  height: 15px;
+  background-color: ${props => props.color};
+  margin-right: 5px;
+  display: inline-block;
+`;
+
+const BoldText = styled.span`
+  font-weight: bold;
 `;
